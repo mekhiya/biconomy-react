@@ -31,4 +31,12 @@ npx hardhat compile
 npx hardhat node
 ```
 
-7) 
+7) install env 
+```
+npm i @symblox/hardhat-dotenv
+```
+
+8) for verifying contract 
+```
+npm install @nomiclabs/hardhat-etherscan
+```
