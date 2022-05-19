@@ -2,7 +2,10 @@ const hre = require("hardhat");
 
 async function main() {
   const Greeter = await hre.ethers.getContractFactory("Greeter");
-  const greeter = await Greeter.deploy("Hello, Hardhat!");
+  //passign address of trusted forwarder
+  //https://docs.biconomy.io/misc/contract-addresses
+  //EIP2771
+  const greeter = await Greeter.deploy("0xF82986F574803dfFd9609BE8b9c7B92f63a1410E");
 
   await greeter.deployed();
 

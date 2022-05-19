@@ -40,3 +40,42 @@ npm i @symblox/hardhat-dotenv
 ```
 npm install @nomiclabs/hardhat-etherscan
 ```
+
+
+For GSN
+```
+yarn add @opengsn/contracts
+```
+
+
+import "@opengsn/contracts/src/BaseRelayRecipient.sol";
+
+can also try importing
+import "github.com/opengsn/forwarder/blobl/master/contracts/BaseRelayReceipient.sol";
+
+
+
+is BaseRelayRecipient
+
+
+Installing clientside sdk for biconomy
+```
+npm install @biconomy/mexa
+```
+
+npm i ethereumjs-util
+
+npm i stream-browserify
+
+npm i eth-sig-util
+
+npm i cipher-base
+
+
+npm i @material-ui/core
+
+below both didnt help
+npm install @mui/material @emotion/react @emotion/styled
+npm install @mui/material @mui/styled-engine-sc styled-components
+
+$ yarn add @material-ui/core@next
