@@ -44,8 +44,12 @@ contract Greeter is BaseRelayRecipient {
         return "1";
     }
 
-    function getStorage() public view returns (string memory) {
-        return data;
+    function getStorage()
+        public
+        view
+        returns (string memory currentQuote, address currentOwner)
+    {
+        return (data, owner);
     }
 
     function setStorage(string memory _newData) public {

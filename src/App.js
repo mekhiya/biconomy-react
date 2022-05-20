@@ -27,16 +27,8 @@ import Box from '@mui/material/Box';
 let sigUtil = require("eth-sig-util");
 
 let config = {
-  // contract: {
-  //   address: "0x880176EDA9f1608A2Bf182385379bDcC1a65Dfcf",
-  //   abi: [{ "inputs": [{ "internalType": "string", "name": "newQuote", "type": "string" }], "name": "setQuote", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "_forwarder", "type": "address" }], "name": "setTrustedForwarder", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "forwarder", "type": "address" }], "stateMutability": "nonpayable", "type": "constructor" }, { "inputs": [], "name": "getQuote", "outputs": [{ "internalType": "string", "name": "currentQuote", "type": "string" }, { "internalType": "address", "name": "currentOwner", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "forwarder", "type": "address" }], "name": "isTrustedForwarder", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "owner", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "quote", "outputs": [{ "internalType": "string", "name": "", "type": "string" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "trustedForwarder", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "versionRecipient", "outputs": [{ "internalType": "string", "name": "", "type": "string" }], "stateMutability": "view", "type": "function" }]
-  // },
-  // apiKey: {
-  //   test: "cNWqZcoBb.4e4c0990-26a8-4a45-b98e-08101f754119",
-  //   prod: "8nvA_lM_Q.0424c54e-b4b2-4550-98c5-8b437d3118a9"
-  // }
   contract: {
-    address: "0x4e9b907a45cEe828E9fE0716030C050377e3f587",
+    address: "0x09Eb4a8bD3D59aA15005f30fC38BCe954635F116",
     abi: [
       {
         "inputs": [
@@ -55,8 +47,13 @@ let config = {
         "outputs": [
           {
             "internalType": "string",
-            "name": "",
+            "name": "currentQuote",
             "type": "string"
+          },
+          {
+            "internalType": "address",
+            "name": "currentOwner",
+            "type": "address"
           }
         ],
         "stateMutability": "view",
@@ -149,8 +146,8 @@ let config = {
     ]
   },
   apiKey: {
-    test: "bFtFVxyEh.d94a8b10-ff0f-4ed9-bf0b-be7b2557e23a",
-    prod: "bFtFVxyEh.d94a8b10-ff0f-4ed9-bf0b-be7b2557e23a"
+    test: "uh2wcgvF5.1ce5c0fe-d232-4ea9-8f4c-b43bd03d7b48",
+    prod: "uh2wcgvF5.1ce5c0fe-d232-4ea9-8f4c-b43bd03d7b48"
   }
 }
 
@@ -230,7 +227,6 @@ function App() {
             config.contract.abi,
             biconomy.getSignerByAddress(userAddress)
           );
-
           contractInterface = new ethers.utils.Interface(config.contract.abi);
           getQuoteFromNetwork();
         }).onEvent(biconomy.ERROR, (error, message) => {
@@ -252,8 +248,14 @@ function App() {
   const onSubmitWithEIP712Sign = async () => {
     if (newQuote !== "" && contract) {
       setTransactionHash("");
+      console.log('metaTxEnabled value is ');
+      console.log(metaTxEnabled);
       if (metaTxEnabled) {
         showInfoMessage(`Getting user signature`);
+        console.log('userAddress');
+        console.log(userAddress);
+        console.log('newQuote');
+        console.log(newQuote);
         sendTransaction(userAddress, newQuote);
       } else {
         console.log("Sending normal transaction");
@@ -307,7 +309,9 @@ function App() {
 
           let provider = biconomy.getEthersProvider();
           // send signed transaction with ethers
-          // promise resolves to transaction hash                  
+          // promise resolves to transaction hash
+          console.log('1111 data value sent is ');
+          console.log(data);
           let txHash = await provider.send("eth_sendRawTransaction", [data]);
           showInfoMessage(`Transaction sent. Waiting for confirmation ..`)
           let receipt = await provider.waitForTransaction(txHash);
@@ -341,6 +345,7 @@ function App() {
     setLoadingMessage("Getting Quote from contact ...");
     //let result = await contract.getQuote();
     let result = await contract.getStorage();
+
     if (
       result &&
       result.currentQuote !== undefined &&
@@ -376,21 +381,23 @@ function App() {
         let { data } = await contract.populateTransaction.setStorage(arg);
         //let { data } = await contract.populateTransaction.setQuote(arg);
         let provider = biconomy.getEthersProvider();
-        let gasLimit = await provider.estimateGas({
-          to: config.contract.address,
-          from: userAddress,
-          data: data
-        });
-        console.log("Gas limit : ", gasLimit);
+        // let gasLimit = await provider.estimateGas({
+        //   to: config.contract.address,
+        //   from: userAddress,
+        //   data: data
+        // });
+        //console.log("Gas limit : ", gasLimit);
         let txParams = {
           data: data,
           to: config.contract.address,
           from: userAddress,
-          gasLimit: gasLimit,
+          //gasLimit: gasLimit,
           signatureType: "EIP712_SIGN"
         };
         let tx;
         try {
+          console.log('Printing Nitin Params');
+          console.log(txParams);
           tx = await provider.send("eth_sendTransaction", [txParams])
         }
         catch (err) {
@@ -411,6 +418,8 @@ function App() {
         })
 
       } catch (error) {
+        console.log('XYZ Error reached');
+        console.log('error message is : ');
         console.log(error);
       }
     }
@@ -440,6 +449,12 @@ function App() {
         </div>
 
         <div className="mb-attribution">
+          <p>
+            selectedAddress is {selectedAddress}
+          </p>
+          <p>
+            owner is {owner}
+          </p>
           <p className="mb-author">{owner}</p>
           {selectedAddress.toLowerCase() === owner.toLowerCase() && (
             <cite className="owner">You are the owner of the quote</cite>
