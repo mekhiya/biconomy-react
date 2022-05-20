@@ -26,9 +26,134 @@ import Box from '@mui/material/Box';
 //import { Box } from "@material-ui/core";
 let sigUtil = require("eth-sig-util");
 
+// let config = {
+//   contract: {
+//     address: "0x09Eb4a8bD3D59aA15005f30fC38BCe954635F116",
+//     abi: [
+//       {
+//         "inputs": [
+//           {
+//             "internalType": "address",
+//             "name": "_trustedForwarder",
+//             "type": "address"
+//           }
+//         ],
+//         "stateMutability": "nonpayable",
+//         "type": "constructor"
+//       },
+//       {
+//         "inputs": [],
+//         "name": "getStorage",
+//         "outputs": [
+//           {
+//             "internalType": "string",
+//             "name": "currentQuote",
+//             "type": "string"
+//           },
+//           {
+//             "internalType": "address",
+//             "name": "currentOwner",
+//             "type": "address"
+//           }
+//         ],
+//         "stateMutability": "view",
+//         "type": "function"
+//       },
+//       {
+//         "inputs": [
+//           {
+//             "internalType": "address",
+//             "name": "forwarder",
+//             "type": "address"
+//           }
+//         ],
+//         "name": "isTrustedForwarder",
+//         "outputs": [
+//           {
+//             "internalType": "bool",
+//             "name": "",
+//             "type": "bool"
+//           }
+//         ],
+//         "stateMutability": "view",
+//         "type": "function"
+//       },
+//       {
+//         "inputs": [],
+//         "name": "owner",
+//         "outputs": [
+//           {
+//             "internalType": "address",
+//             "name": "",
+//             "type": "address"
+//           }
+//         ],
+//         "stateMutability": "view",
+//         "type": "function"
+//       },
+//       {
+//         "inputs": [
+//           {
+//             "internalType": "string",
+//             "name": "_newData",
+//             "type": "string"
+//           }
+//         ],
+//         "name": "setStorage",
+//         "outputs": [],
+//         "stateMutability": "nonpayable",
+//         "type": "function"
+//       },
+//       {
+//         "inputs": [
+//           {
+//             "internalType": "address",
+//             "name": "_trustedForwarder",
+//             "type": "address"
+//           }
+//         ],
+//         "name": "setTrustForwarder",
+//         "outputs": [],
+//         "stateMutability": "nonpayable",
+//         "type": "function"
+//       },
+//       {
+//         "inputs": [],
+//         "name": "trustedForwarder",
+//         "outputs": [
+//           {
+//             "internalType": "address",
+//             "name": "",
+//             "type": "address"
+//           }
+//         ],
+//         "stateMutability": "view",
+//         "type": "function"
+//       },
+//       {
+//         "inputs": [],
+//         "name": "versionRecipient",
+//         "outputs": [
+//           {
+//             "internalType": "string",
+//             "name": "",
+//             "type": "string"
+//           }
+//         ],
+//         "stateMutability": "pure",
+//         "type": "function"
+//       }
+//     ]
+//   },
+//   apiKey: {
+//     test: "uh2wcgvF5.1ce5c0fe-d232-4ea9-8f4c-b43bd03d7b48",
+//     prod: "uh2wcgvF5.1ce5c0fe-d232-4ea9-8f4c-b43bd03d7b48"
+//   }
+// } // FOR Kovan
+
 let config = {
   contract: {
-    address: "0x09Eb4a8bD3D59aA15005f30fC38BCe954635F116",
+    address: "0xcB914A7991C10dc1176cBDc2843DA7513F475918",
     abi: [
       {
         "inputs": [
@@ -146,10 +271,10 @@ let config = {
     ]
   },
   apiKey: {
-    test: "uh2wcgvF5.1ce5c0fe-d232-4ea9-8f4c-b43bd03d7b48",
-    prod: "uh2wcgvF5.1ce5c0fe-d232-4ea9-8f4c-b43bd03d7b48"
+    test: "E0lEoCjoi.c1564ca9-aebc-451e-a315-ba34278b698f",
+    prod: "E0lEoCjoi.c1564ca9-aebc-451e-a315-ba34278b698f"
   }
-}
+}//For Mumbai
 
 let walletProvider, walletSigner;
 let contract, contractInterface;
@@ -201,8 +326,15 @@ function App() {
         await provider.enable();
         setLoadingMessage("Initializing Biconomy ...");
         // We're creating biconomy provider linked to your network of choice where your contract is deployed
+        //default given in github code
         //let jsonRpcProvider = new ethers.providers.JsonRpcProvider("https://kovan.infura.io/v3/d126f392798444609246423b06116c77");
-        let jsonRpcProvider = new ethers.providers.JsonRpcProvider("https://eth-kovan.alchemyapi.io/v2/hOFbbfHHyLZrzzWoEWfaU9w1o-SzePAp");
+
+        //for kovan
+        //let jsonRpcProvider = new ethers.providers.JsonRpcProvider("https://eth-kovan.alchemyapi.io/v2/hOFbbfHHyLZrzzWoEWfaU9w1o-SzePAp");
+
+        //for Mumbai
+        let jsonRpcProvider = new ethers.providers.JsonRpcProvider("https://polygon-mumbai.g.alchemy.com/v2/kwDkVGahinYBakz22FjbxKTvQ0LWmNrS");
+
         biconomy = new Biconomy(jsonRpcProvider, {
           walletProvider: window.ethereum,
           apiKey: config.apiKey.prod,

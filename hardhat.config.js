@@ -3,7 +3,7 @@ require('dotenv').config();
 require("@nomiclabs/hardhat-ethers");
 require("@nomiclabs/hardhat-etherscan");
 
-const { API_URL_KOVAN, PRIVATE_KEY, ETHERSCAN_TOKEN } = process.env;
+const { API_URL_KOVAN, API_URL_MUMBAI, PRIVATE_KEY, ETHERSCAN_TOKEN, POLYGONSCAN_API_KEY } = process.env;
 
 // This is a sample Hardhat task. To learn how to create your own go to
 // https://hardhat.org/guides/create-task.html
@@ -33,10 +33,16 @@ module.exports = {
     kovan: {
       url: API_URL_KOVAN,
       accounts: [`0x${PRIVATE_KEY}`]
+    },
+    mumbai: {
+      url: API_URL_MUMBAI,
+      accounts: [`0x${PRIVATE_KEY}`]
     }
   },
   etherscan: {
-    apiKey: ETHERSCAN_TOKEN
+    //Mumbai
+    apiKey: POLYGONSCAN_API_KEY
+    // apiKey: ETHERSCAN_TOKEN
   }
 };
 
